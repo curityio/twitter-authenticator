@@ -22,6 +22,7 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import io.curity.identityserver.plugin.authentication.DefaultOAuthClient;
 import io.curity.identityserver.plugin.authentication.OAuthClient;
+import io.curity.identityserver.plugin.authentication.RequestModel;
 import io.curity.identityserver.plugin.twitter.config.TwitterAuthenticatorPluginConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
