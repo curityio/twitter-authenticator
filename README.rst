@@ -13,25 +13,10 @@ Config
 +-------------------+--------------------------------------------------+-----------------------------+
 | Name              | Default                                          | Description                 |
 +===================+==================================================+=============================+
-| ``Client ID``     |                                                  | Twitter app client id      |
+| ``Client ID``     |                                                  | Twitter app client id       |
 |                   |                                                  |                             |
 +-------------------+--------------------------------------------------+-----------------------------+
-| ``Client Secret`` |                                                  | Twitter app secret key     |
-|                   |                                                  |                             |
-+-------------------+--------------------------------------------------+-----------------------------+
-| ``Authorization`` | https://www.twitter.com/oauth/v2/authorization  | URL to the Twitter         |
-| ``Endpoint``      |                                                  | authorization endpoint      |
-|                   |                                                  |                             |
-+-------------------+--------------------------------------------------+-----------------------------+
-| ``Token``         | https://www.twitter.com/oauth/v2/accessToken    | URL to the Twitter         |
-| ``Endpoint``      |                                                  | authorization endpoint      |
-+-------------------+--------------------------------------------------+-----------------------------+
-| ``Scope``         |                                                  | A space-separated list of   |
-|                   |                                                  | scopes to request from      |
-|                   |                                                  | Twitter                    |
-+-------------------+--------------------------------------------------+-----------------------------+
-| ``User Info``     | https://api.twitter.com/v1/people/~?format=json | URL to the Twitter         |
-| ``Endpoint``      |                                                  | userinfo(profile) endpoint  |
+| ``Client Secret`` |                                                  | Twitter app secret key      |
 |                   |                                                  |                             |
 +-------------------+--------------------------------------------------+-----------------------------+
 

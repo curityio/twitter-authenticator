@@ -32,18 +32,6 @@ public interface TwitterAuthenticatorPluginConfig extends Configuration {
     @Description("Consumer Secret (API Secret)")
     String getClientSecret();
 
-    @Description("URL to the Twitter authorization endpoint")
-    @DefaultURI("https://api.twitter.com/oauth/authorize")
-    URI getAuthorizationEndpoint();
-
-    @Description("URL to the Twitter token endpoint")
-    @DefaultURI("https://api.twitter.com/oauth2/token")
-    URI getTokenEndpoint();
-
-    @Description("A space-separated list of scopes to request from Twitter")
-    @DefaultString("")
-    String getScope();
-
     SessionManager getSessionManager();
 
 }
