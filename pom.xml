@@ -76,11 +76,6 @@
             <artifactId>identityserver.plugins.oauth.authenticators-utility</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.google.oauth-client</groupId>-->
-            <!--<artifactId>google-oauth-client</artifactId>-->
-            <!--<version>1.23.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.github.scribejava</groupId>
             <artifactId>scribejava-apis</artifactId>
