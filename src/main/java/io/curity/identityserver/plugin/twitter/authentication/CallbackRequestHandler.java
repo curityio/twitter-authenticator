@@ -24,6 +24,11 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 import io.curity.identityserver.plugin.authentication.CodeFlowOAuthClient;
 import io.curity.identityserver.plugin.authentication.OAuthClient;
 import io.curity.identityserver.plugin.twitter.config.TwitterAuthenticatorPluginConfig;
+import se.curity.identityserver.sdk.attribute.Attribute;
+import se.curity.identityserver.sdk.attribute.Attributes;
+import se.curity.identityserver.sdk.attribute.AuthenticationAttributes;
+import se.curity.identityserver.sdk.attribute.ContextAttributes;
+import se.curity.identityserver.sdk.attribute.SubjectAttributes;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
@@ -33,12 +38,12 @@ import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformat
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
 
-import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN_SECRET;
+import static io.curity.identityserver.plugin.twitter.authentication.Constants.SCREEN_NAME;
+import static io.curity.identityserver.plugin.twitter.authentication.Constants.USER_ID;
 
 public class CallbackRequestHandler
         implements AuthenticatorRequestHandler<CallbackGetRequestModel> {
@@ -77,13 +82,21 @@ public class CallbackRequestHandler
     public Optional<AuthenticationResult> get(CallbackGetRequestModel requestModel,
                                               Response response) {
         _oauthClient.redirectToAuthenticationOnError(requestModel.getRequest(), _config.id());
-        OAuth1AccessToken accessToken;
         try {
-             accessToken = _service.getAccessToken(_requestToken, requestModel.getOAuthVerifier());
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+            OAuth1AccessToken accessToken = _service.getAccessToken(_requestToken, requestModel.getOAuthVerifier());
 
+            Attributes subjectAttributes = Attributes.of(Attribute.of(USER_ID, accessToken.getParameter(USER_ID)), Attribute.of(SCREEN_NAME, accessToken.getParameter(SCREEN_NAME)));
+            Attributes contextAttributes = Attributes.of(Attribute.of(OAUTH_TOKEN, accessToken.getToken()), Attribute.of(OAUTH_TOKEN_SECRET, accessToken.getTokenSecret()));
+
+            AuthenticationAttributes attributes = AuthenticationAttributes.of(
+                    SubjectAttributes.of(accessToken.getParameter(USER_ID), subjectAttributes),
+                    ContextAttributes.of(contextAttributes));
+            AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
+            return Optional.ofNullable(authenticationResult);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            _oauthClient.redirectToAuthenticationOnError(ex.getMessage(), "", _config.id());
+        }
         return Optional.empty();
     }
 

@@ -35,9 +35,7 @@ import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformat
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
 
-import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN_SECRET;
@@ -76,8 +74,9 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
             url = service.getAuthorizationUrl(requestToken);
             _sessionManager.put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
             _sessionManager.put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
-        } catch (IOException | InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            _oauthClient.redirectToAuthenticationOnError(ex.getMessage(), "", _config.id());
         }
         throw _exceptionFactory.redirectException(url);
     }
