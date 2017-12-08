@@ -21,7 +21,7 @@ import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
-import io.curity.identityserver.plugin.authentication.CodeFlowOAuthClient;
+import io.curity.identityserver.plugin.authentication.DefaultOAuthClient;
 import io.curity.identityserver.plugin.authentication.OAuthClient;
 import io.curity.identityserver.plugin.twitter.config.TwitterAuthenticatorPluginConfig;
 import se.curity.identityserver.sdk.attribute.Attribute;
@@ -59,7 +59,7 @@ public class CallbackRequestHandler
                                   Json json,
                                   TwitterAuthenticatorPluginConfig config) {
         _exceptionFactory = exceptionFactory;
-        _oauthClient = new CodeFlowOAuthClient(exceptionFactory, provider, json, config.getSessionManager());
+        _oauthClient = new DefaultOAuthClient(exceptionFactory, provider, json, config.getSessionManager());
         _config = config;
         _sessionManager = _config.getSessionManager();
         _service = new ServiceBuilder(_config.getClientId())

@@ -20,7 +20,7 @@ import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
-import io.curity.identityserver.plugin.authentication.CodeFlowOAuthClient;
+import io.curity.identityserver.plugin.authentication.DefaultOAuthClient;
 import io.curity.identityserver.plugin.authentication.OAuthClient;
 import io.curity.identityserver.plugin.twitter.config.TwitterAuthenticatorPluginConfig;
 import org.slf4j.Logger;
@@ -54,7 +54,7 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
                                               Json json,
                                               AuthenticatorInformationProvider provider) {
         _config = config;
-        _oauthClient = new CodeFlowOAuthClient(exceptionFactory, provider, json, config.getSessionManager());
+        _oauthClient = new DefaultOAuthClient(exceptionFactory, provider, json, config.getSessionManager());
         this._exceptionFactory = exceptionFactory;
         this._sessionManager = config.getSessionManager();
         service = new ServiceBuilder(_config.getClientId())
