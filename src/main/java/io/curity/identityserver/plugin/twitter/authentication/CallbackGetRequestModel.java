@@ -16,31 +16,59 @@
 
 package io.curity.identityserver.plugin.twitter.authentication;
 
+import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.web.Request;
+
+import java.util.function.Function;
 
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_VERIFIER;
 
-public class CallbackGetRequestModel {
+public class CallbackGetRequestModel
+{
+    @Nullable
+    private final String _error;
+
+    @Nullable
+    private final String _errorDescription;
+
+
     private String _oauthToken;
     private String _oauthVerifier;
-    private Request _request;
 
-    public CallbackGetRequestModel(Request request) {
-        _oauthToken = request.getParameterValueOrError(OAUTH_TOKEN);
-        _oauthVerifier = request.getParameterValueOrError(OAUTH_VERIFIER);
-        _request = request;
+    CallbackGetRequestModel(Request request)
+    {
+        Function<String, ? extends RuntimeException> invalidParameter = (s) -> new RuntimeException(String.format(
+                "Expected only one query string parameter named %s, but found multiple.", s));
+
+        _oauthToken = request.getParameterValueOrError(OAUTH_TOKEN, invalidParameter);
+        _oauthVerifier = request.getParameterValueOrError(OAUTH_VERIFIER, invalidParameter);
+        _error = request.getQueryParameterValueOrError("error", invalidParameter);
+        _errorDescription = request.getQueryParameterValueOrError("error_description", invalidParameter);
     }
 
-    public String getOAuthToken() {
+
+    @Nullable
+    public String getErrorDescription()
+    {
+        return _errorDescription;
+    }
+
+
+    @Nullable
+    public String getError()
+    {
+        return _error;
+    }
+
+    public String getOAuthToken()
+    {
         return _oauthToken;
     }
 
-    public String getOAuthVerifier() {
+    public String getOAuthVerifier()
+    {
         return _oauthVerifier;
     }
 
-    public Request getRequest() {
-        return _request;
-    }
 }

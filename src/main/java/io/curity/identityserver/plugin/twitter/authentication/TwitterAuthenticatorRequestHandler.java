@@ -20,75 +20,95 @@ import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
-import io.curity.identityserver.plugin.authentication.DefaultOAuthClient;
-import io.curity.identityserver.plugin.authentication.OAuthClient;
-import io.curity.identityserver.plugin.authentication.RequestModel;
 import io.curity.identityserver.plugin.twitter.config.TwitterAuthenticatorPluginConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
+import se.curity.identityserver.sdk.errors.ErrorCode;
+import se.curity.identityserver.sdk.http.RedirectStatusCode;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
-import se.curity.identityserver.sdk.service.Json;
-import se.curity.identityserver.sdk.service.SessionManager;
 import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.Optional;
 
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN_SECRET;
+import static io.curity.identityserver.plugin.twitter.descriptor.TwitterAuthenticatorPluginDescriptor.CALLBACK;
 
-public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestHandler<RequestModel> {
+public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestHandler<Request>
+{
     private static final Logger _logger = LoggerFactory.getLogger(TwitterAuthenticatorRequestHandler.class);
 
     private final TwitterAuthenticatorPluginConfig _config;
-    private final OAuthClient _oauthClient;
-    private final OAuth10aService service;
+    private final AuthenticatorInformationProvider _authenticatorInformationProvider;
     private final ExceptionFactory _exceptionFactory;
-    private final SessionManager _sessionManager;
 
-    public TwitterAuthenticatorRequestHandler(TwitterAuthenticatorPluginConfig config,
-                                              ExceptionFactory exceptionFactory,
-                                              Json json,
-                                              AuthenticatorInformationProvider provider) {
+    public TwitterAuthenticatorRequestHandler(TwitterAuthenticatorPluginConfig config)
+    {
         _config = config;
-        _oauthClient = new DefaultOAuthClient(exceptionFactory, provider, json, config.getSessionManager());
-        this._exceptionFactory = exceptionFactory;
-        this._sessionManager = config.getSessionManager();
-        service = new ServiceBuilder(_config.getClientId())
+        _exceptionFactory = config.getExceptionFactory();
+        _authenticatorInformationProvider = config.getAuthenticatorInformationProvider();
+    }
+
+    @Override
+    public Optional<AuthenticationResult> get(Request request, Response response)
+    {
+        _logger.debug("GET request received for authentication");
+
+        OAuth10aService service = new ServiceBuilder(_config.getClientId())
                 .apiSecret(_config.getClientSecret())
-                .callback(_oauthClient.getCallbackUrl())
+                .callback(createRedirectUri())
                 .build(TwitterApi.instance());
-    }
-
-    @Override
-    public Optional<AuthenticationResult> get(RequestModel requestModel, Response response) {
-        _logger.info("GET request received for authentication authentication");
-
-        String url = "";
-        _oauthClient.setServiceProviderId(requestModel.getRequest());
-        try {
+        String authorizationEndpoint = "";
+        try
+        {
             final OAuth1RequestToken requestToken = service.getRequestToken();
-            url = service.getAuthorizationUrl(requestToken);
-            _sessionManager.put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
-            _sessionManager.put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            _oauthClient.redirectToAuthenticationOnError(ex.getMessage(), "", _config.id());
+            authorizationEndpoint = service.getAuthorizationUrl(requestToken);
+            _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
+            _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        throw _exceptionFactory.redirectException(url);
+
+
+        _logger.debug("Redirecting to {}", authorizationEndpoint);
+
+        throw _exceptionFactory.redirectException(authorizationEndpoint,
+                RedirectStatusCode.MOVED_TEMPORARILY);
+    }
+
+    private String createRedirectUri()
+    {
+        try
+        {
+            URI authUri = _authenticatorInformationProvider.getFullyQualifiedAuthenticationUri();
+
+            return new URL(authUri.toURL(), authUri.getPath() + "/" + CALLBACK).toString();
+        } catch (MalformedURLException e)
+        {
+            throw _exceptionFactory.internalServerException(ErrorCode.INVALID_REDIRECT_URI,
+                    "Could not create redirect URI");
+        }
     }
 
     @Override
-    public Optional<AuthenticationResult> post(RequestModel requestModel, Response response) {
-        return Optional.empty();
+    public Optional<AuthenticationResult> post(Request request, Response response)
+    {
+        throw _exceptionFactory.methodNotAllowed();
     }
 
     @Override
-    public RequestModel preProcess(Request request, Response response) {
-        return new RequestModel(request);
+    public Request preProcess(Request request, Response response)
+    {
+        return request;
     }
 }
