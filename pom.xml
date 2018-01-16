@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.curity.identityserver.plugin</groupId>
-    <artifactId>identityserver.plugins.authenticators.linkedin</artifactId>
+    <artifactId>identityserver.plugins.authenticators.twitter</artifactId>
     <version>1.2.0-SNAPSHOT</version>
 
-    <name>LinkedIn Authenticator</name>
+    <name>Twitter Authenticator</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
