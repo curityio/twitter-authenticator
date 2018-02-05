@@ -17,15 +17,14 @@
 package io.curity.identityserver.plugin.twitter.config;
 
 import se.curity.identityserver.sdk.config.Configuration;
-import se.curity.identityserver.sdk.config.annotation.DefaultString;
-import se.curity.identityserver.sdk.config.annotation.DefaultURI;
 import se.curity.identityserver.sdk.config.annotation.Description;
+import se.curity.identityserver.sdk.service.ExceptionFactory;
 import se.curity.identityserver.sdk.service.SessionManager;
-
-import java.net.URI;
+import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 
 @SuppressWarnings("InterfaceNeverImplemented")
-public interface TwitterAuthenticatorPluginConfig extends Configuration {
+public interface TwitterAuthenticatorPluginConfig extends Configuration
+{
     @Description("Consumer Key (API Key)")
     String getClientId();
 
@@ -34,4 +33,7 @@ public interface TwitterAuthenticatorPluginConfig extends Configuration {
 
     SessionManager getSessionManager();
 
+    ExceptionFactory getExceptionFactory();
+
+    AuthenticatorInformationProvider getAuthenticatorInformationProvider();
 }
