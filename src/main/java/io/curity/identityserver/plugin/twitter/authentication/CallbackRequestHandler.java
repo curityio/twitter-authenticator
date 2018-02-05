@@ -54,24 +54,25 @@ public class CallbackRequestHandler
         implements AuthenticatorRequestHandler<CallbackGetRequestModel>
 {
     private static final Logger _logger = LoggerFactory.getLogger(CallbackRequestHandler.class);
-    
+
     private final ExceptionFactory _exceptionFactory;
     private final OAuth10aService _service;
-    private final SessionManager _sessionManager;
     private final OAuth1RequestToken _requestToken;
     private final AuthenticatorInformationProvider _authenticatorInformationProvider;
 
 
     public CallbackRequestHandler(TwitterAuthenticatorPluginConfig _config)
     {
+        SessionManager sessionManager = _config.getSessionManager();
+
         _exceptionFactory = _config.getExceptionFactory();
-        _sessionManager = _config.getSessionManager();
         _authenticatorInformationProvider = _config.getAuthenticatorInformationProvider();
         _service = new ServiceBuilder(_config.getClientId())
                 .apiSecret(_config.getClientSecret())
                 .callback(createRedirectUri())
                 .build(TwitterApi.instance());
-        _requestToken = new OAuth1RequestToken(_sessionManager.get(OAUTH_TOKEN).getValue().toString(), _sessionManager.get(OAUTH_TOKEN_SECRET).getValue().toString());
+        _requestToken = new OAuth1RequestToken(_config.getSessionManager().get(OAUTH_TOKEN).getValue().toString(),
+                sessionManager.get(OAUTH_TOKEN_SECRET).getValue().toString());
     }
 
     @Override
@@ -80,7 +81,8 @@ public class CallbackRequestHandler
         if (request.isGetRequest())
         {
             return new CallbackGetRequestModel(request);
-        } else
+        }
+        else
         {
             throw _exceptionFactory.methodNotAllowed();
         }
@@ -95,19 +97,23 @@ public class CallbackRequestHandler
         {
             OAuth1AccessToken accessToken = _service.getAccessToken(_requestToken, requestModel.getOAuthVerifier());
 
-            Attributes subjectAttributes = Attributes.of(Attribute.of(USER_ID, accessToken.getParameter(USER_ID)), Attribute.of(SCREEN_NAME, accessToken.getParameter(SCREEN_NAME)));
-            Attributes contextAttributes = Attributes.of(Attribute.of(OAUTH_TOKEN, accessToken.getToken()), Attribute.of(OAUTH_TOKEN_SECRET, accessToken.getTokenSecret()));
+            Attributes subjectAttributes = Attributes.of(Attribute.of(USER_ID, accessToken.getParameter(USER_ID)),
+                    Attribute.of(SCREEN_NAME, accessToken.getParameter(SCREEN_NAME)));
+            Attributes contextAttributes = Attributes.of(Attribute.of(OAUTH_TOKEN, accessToken.getToken()),
+                    Attribute.of(OAUTH_TOKEN_SECRET, accessToken.getTokenSecret()));
 
             AuthenticationAttributes attributes = AuthenticationAttributes.of(
                     SubjectAttributes.of(accessToken.getParameter(USER_ID), subjectAttributes),
                     ContextAttributes.of(contextAttributes));
             AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
-            return Optional.ofNullable(authenticationResult);
-        } catch (Exception ex)
+
+            return Optional.of(authenticationResult);
+        }
+        catch (Exception ex)
         {
             _logger.info("Login failed with twitter, reason :  {}", ex.getMessage());
-            throw _exceptionFactory.externalServiceException("Login failed with twitter, reason : " + ex.getMessage());
 
+            throw _exceptionFactory.externalServiceException("Login failed with twitter, reason : " + ex.getMessage());
         }
     }
 
@@ -117,18 +123,19 @@ public class CallbackRequestHandler
         {
             if ("access_denied".equals(requestModel.getError()))
             {
-                _logger.debug("Got an error from LinkedIn: {} - {}", requestModel.getError(), requestModel.getErrorDescription());
+                _logger.debug("Got an error from LinkedIn: {} - {}", requestModel.getError(), requestModel
+                        .getErrorDescription());
 
                 throw _exceptionFactory.redirectException(
                         _authenticatorInformationProvider.getAuthenticationBaseUri().toASCIIString());
             }
 
-            _logger.warn("Got an error from LinkedIn: {} - {}", requestModel.getError(), requestModel.getErrorDescription());
+            _logger.warn("Got an error from LinkedIn: {} - {}", requestModel.getError(), requestModel
+                    .getErrorDescription());
 
             throw _exceptionFactory.externalServiceException("Login with LinkedIn failed");
         }
     }
-
 
     private String createRedirectUri()
     {
@@ -137,7 +144,8 @@ public class CallbackRequestHandler
             URI authUri = _authenticatorInformationProvider.getFullyQualifiedAuthenticationUri();
 
             return new URL(authUri.toURL(), authUri.getPath() + "/" + CALLBACK).toString();
-        } catch (MalformedURLException e)
+        }
+        catch (MalformedURLException e)
         {
             throw _exceptionFactory.internalServerException(ErrorCode.INVALID_REDIRECT_URI,
                     "Could not create redirect URI");
@@ -145,10 +153,8 @@ public class CallbackRequestHandler
     }
 
     @Override
-    public Optional<AuthenticationResult> post(CallbackGetRequestModel requestModel,
-                                               Response response)
+    public Optional<AuthenticationResult> post(CallbackGetRequestModel requestModel, Response response)
     {
         throw _exceptionFactory.methodNotAllowed();
     }
-
 }
