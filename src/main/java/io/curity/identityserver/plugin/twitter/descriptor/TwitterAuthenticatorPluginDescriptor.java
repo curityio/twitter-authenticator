@@ -50,5 +50,4 @@ public final class TwitterAuthenticatorPluginDescriptor
         handlers.put(CALLBACK, CallbackRequestHandler.class);
         return handlers;
     }
-
 }

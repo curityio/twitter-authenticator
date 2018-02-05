@@ -32,7 +32,6 @@ public class CallbackGetRequestModel
     @Nullable
     private final String _errorDescription;
 
-
     private String _oauthToken;
     private String _oauthVerifier;
 
@@ -46,7 +45,6 @@ public class CallbackGetRequestModel
         _error = request.getQueryParameterValueOrError("error", invalidParameter);
         _errorDescription = request.getQueryParameterValueOrError("error_description", invalidParameter);
     }
-
 
     @Nullable
     public String getErrorDescription()

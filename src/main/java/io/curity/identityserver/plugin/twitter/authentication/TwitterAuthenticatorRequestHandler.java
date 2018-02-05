@@ -67,6 +67,7 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
                 .callback(createRedirectUri())
                 .build(TwitterApi.instance());
         String authorizationEndpoint = "";
+        
         try
         {
             final OAuth1RequestToken requestToken = service.getRequestToken();
@@ -74,11 +75,11 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
             _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
             _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-
 
         _logger.debug("Redirecting to {}", authorizationEndpoint);
 
@@ -93,7 +94,8 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
             URI authUri = _authenticatorInformationProvider.getFullyQualifiedAuthenticationUri();
 
             return new URL(authUri.toURL(), authUri.getPath() + "/" + CALLBACK).toString();
-        } catch (MalformedURLException e)
+        }
+        catch (MalformedURLException e)
         {
             throw _exceptionFactory.internalServerException(ErrorCode.INVALID_REDIRECT_URI,
                     "Could not create redirect URI");
