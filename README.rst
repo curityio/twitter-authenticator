@@ -9,7 +9,7 @@ This project provides an opens source Twitter Authenticator plug-in for the Curi
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
-* Curity Identity Server 2.4.0 and `its system requirements <https://developer.curity.io/docs/latest/system-admin-guide/system-requirements.html>`_
+* Curity Identity Server 2.4.0+ and `its system requirements <https://developer.curity.io/docs/latest/system-admin-guide/system-requirements.html>`_
 
 Requirements for Building from Source
 """""""""""""""""""""""""""""""""""""
@@ -22,10 +22,15 @@ Compiling the Plug-in from Source
 
 The source is very easy to compile. To do so from a shell, issue this command: ``mvn package``.
 
+This will place the package, along with the relevant dependencies, in the ``target/libs`` directory.
+
 Installation
 ~~~~~~~~~~~~
 
-To install this plug-in, either download a binary version available from the `releases section of this project's GitHub repository <https://github.com/curityio/twitter-authenticator/releases>`_ or compile it from source (as described above). If you compiled the plug-in from source, the package will be placed in the ``target`` subdirectory. The resulting JAR file or the one downloaded from GitHub needs to placed in the directory ``${IDSVR_HOME}/usr/share/plugins/twitter``. (The name of the last directory, ``twitter``, which is the plug-in group, is arbitrary and can be anything.) After doing so, the plug-in will become available as soon as the node is restarted.
+This plug-in can be either downloaded from the `releases section of this project's GitHub repository <https://github.com/curityio/twitter-authenticator/releases>`_ or compiled from source (as described above).
+
+In either case, to install the plugin, copy the plug-in jar and its dependencies to the ``${IDSVR_HOME}/usr/share/plugins/twitter`` directory (the name of the last directory, ``twitter``, which is the plug-in group, is arbitrary and can be anything).
+After doing so, the plug-in will become available as soon as the node is restarted.
 
 .. note::
 
