@@ -66,20 +66,21 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
                 .apiSecret(_config.getClientSecret())
                 .callback(createRedirectUri())
                 .build(TwitterApi.instance());
-        String authorizationEndpoint = "";
-        
+
+
+        final OAuth1RequestToken requestToken;
         try
         {
-            final OAuth1RequestToken requestToken = service.getRequestToken();
-            authorizationEndpoint = service.getAuthorizationUrl(requestToken);
-            _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
-            _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
-
+            requestToken = service.getRequestToken();
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            throw _exceptionFactory.externalServiceException("Error authenticating with Twitter: " + e);
         }
+
+        String authorizationEndpoint = service.getAuthorizationUrl(requestToken);
+        _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
+        _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
 
         _logger.debug("Redirecting to {}", authorizationEndpoint);
 
