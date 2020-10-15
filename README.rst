@@ -26,6 +26,8 @@ Compiling the Plug-in from Source
 
 The source is very easy to compile. To do so from a shell, issue this command: ``mvn package``.
 
+This will place the package, along with the relevant dependencies, in the ``target/libs`` directory.
+
 Installation
 ~~~~~~~~~~~~
 
