@@ -35,7 +35,7 @@ To install this plug-in, either download a binary version available from the `re
 
     The JAR file needs to be deployed to each run-time node and the admin node. For simple test deployments where the admin node is a run-time node, the JAR file only needs to be copied to one location.
 
-Following jars must be in plugin group classpath.
+The following dependent JAR files must be in the same directory, the plugin group:
 
 -  `scribejava-apis-5.0.0.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-apis/5.0.0/scribejava-apis-5.0.0.jar>`_
 -  `scribejava-core-5.0.0.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-core/5.0.0/scribejava-core-5.0.0.jar>`_
@@ -54,14 +54,12 @@ As `described in the Twitter documentation <https://developer.twitter.com/en/doc
 
     Fill in the name, description and website and save changes.
 
-
 When you view the app's configuration after creating it, you'll find the ``Consumer Key`` and ``Consumer Secret`` in ``Keys and Access Tokens`` section. These will be needed later when configuring the plug-in in Curity.
 
     .. figure:: docs/images/create-twitter-app2.png
         :name: new-twitter-app
         :align: center
         :width: 500px
-
 
 You can manage permissions to twitter resource in ``Permissions`` section of app configuration as show in below figure:
 
@@ -83,9 +81,9 @@ The easiest way to configure a new Twitter authenticator is using the Curity adm
         :align: center
         :width: 600px
 
-5. On the next page, you can define all of the standard authenticator configuration options like any previous authenticator that should run, the resulting ACR, transformers that should executed, etc. At the bottom of the configuration page, the Twitter-specific options can be found.
+5. On the next page, you can define all of the standard authenticator configuration options like any previous authenticator that should run, the resulting ACR, transformers that should executed, etc. At the top of the configuration page, the Twitter-specific options can be found.
 
-        .. note::
+    .. note::
 
         The Twitter-specific configuration is generated dynamically based on the `configuration model defined in the Java interface <https://github.com/curityio/twitter-authenticator/blob/master/src/main/java/io/curity/identityserver/plugin/twitter/config/TwitterAuthenticatorPluginConfig.java>`_.
 
