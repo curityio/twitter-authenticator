@@ -16,7 +16,6 @@
 
 package io.curity.identityserver.plugin.twitter.authentication;
 
-import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
