@@ -40,6 +40,8 @@ The following dependent JAR files must be in the same directory, the plugin grou
 -  `scribejava-apis-5.0.0.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-apis/5.0.0/scribejava-apis-5.0.0.jar>`_
 -  `scribejava-core-5.0.0.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-core/5.0.0/scribejava-core-5.0.0.jar>`_
 
+After running ``mvn package``, these will be placed into the ``target/dependency`` directory and can be copied from there to the plugin group directory.
+
 For a more detailed explanation of installing plug-ins, refer to the `Curity developer guide <https://developer.curity.io/docs/latest/developer-guide/plugins/index.html#plugin-installation>`_.
 
 Creating an App in Twitter
