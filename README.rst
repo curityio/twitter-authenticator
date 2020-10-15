@@ -104,4 +104,4 @@ More Information
 
 Please visit `curity.io <https://curity.io/>`_ for more information about the Curity Identity Server.
 
-Copyright (C) 2017 Curity AB.
+Copyright (C) 2020 Curity AB.
