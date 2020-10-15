@@ -1,7 +1,11 @@
 package io.curity.identityserver.plugin.twitter.authentication;
 
-class Constants
+final class Constants
 {
+    private Constants()
+    {
+    }
+
     static final String OAUTH_TOKEN = "oauth_token";
     static final String OAUTH_TOKEN_SECRET = "oauth_token_secret";
     static final String OAUTH_VERIFIER = "oauth_verifier";
