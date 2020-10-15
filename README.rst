@@ -98,7 +98,7 @@ Once the configuration is committed and running, the authenticator can be used l
 License
 ~~~~~~~
 
-This plugin and its associated documentation is listed under the `Apache 2 license <LICENSE>`_.
+This plugin and its associated documentation is listed under the `Apache 2 license <LICENSE>`_. Dependencies and transitive dependencies have their own licenses. Refer to the home page of those projects for details.
 
 More Information
 ~~~~~~~~~~~~~~~~
