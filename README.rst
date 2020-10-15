@@ -37,9 +37,12 @@ To install this plug-in, either download a binary version available from the `re
 
     The JAR file needs to be deployed to each run-time node and the admin node. For simple test deployments where the admin node is a run-time node, the JAR file only needs to be copied to one location.
 
-The following dependent JAR files must be in the same directory, the plugin group:
+The following dependent JAR files must be in the same directory, the plugin group directory:
 
--  `scribejava-core-7.1.1.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-core/7.1.1/scribejava-core-7.1.1.jar>`_
+- `scribejava-core-7.1.1.jar <https://repo1.maven.org/maven2/com/github/scribejava/scribejava-core/7.1.1/scribejava-core-7.1.1.jar>`_
+- `jackson-core-2.11.2.jar <https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.11.2/jackson-core-2.11.2.jar>`_
+- `jackson-annotations-2.11.2.jar <https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.11.2/jackson-annotations-2.11.2.jar>`
+- `jackson-databind-2.11.2.jar <https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.11.2/jackson-databind-2.11.2.jar>`_
 
 After running ``mvn package``, these will be placed into the ``target/libs`` directory and can be copied from there to the plugin group directory.
 
