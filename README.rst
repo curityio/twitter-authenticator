@@ -29,7 +29,7 @@ The source is very easy to compile. To do so from a shell, issue this command: `
 Installation
 ~~~~~~~~~~~~
 
-To install this plug-in, either download a binary version available from the `releases section of this project's GitHub repository <https://github.com/curityio/twitter-authenticator/releases>`_ or compile it from source (as described above). If you compiled the plug-in from source, the package will be placed in the ``target`` subdirectory. The resulting JAR file or the one downloaded from GitHub needs to placed in the directory ``${IDSVR_HOME}/usr/share/plugins/twitter``. (The name of the last directory, ``twitter``, which is the plug-in group, is arbitrary and can be anything.) After doing so, the plug-in will become available as soon as the node is restarted.
+To install this plug-in, either download a binary version available from the `releases section of this project's GitHub repository <https://github.com/curityio/twitter-authenticator/releases>`_ or compile it from source (as described above). If you compiled the plug-in from source, the package will be placed in the ``target/libs`` subdirectory. The resulting JAR file or the one downloaded from GitHub needs to placed in the directory ``${IDSVR_HOME}/usr/share/plugins/twitter``. (The name of the last directory, ``twitter``, which is the plug-in group, is arbitrary and can be anything.) After doing so, the plug-in will become available as soon as the node is restarted.
 
 .. note::
 
@@ -37,10 +37,9 @@ To install this plug-in, either download a binary version available from the `re
 
 The following dependent JAR files must be in the same directory, the plugin group:
 
--  `scribejava-apis-5.0.0.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-apis/5.0.0/scribejava-apis-5.0.0.jar>`_
--  `scribejava-core-5.0.0.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-core/5.0.0/scribejava-core-5.0.0.jar>`_
+-  `scribejava-core-7.1.1.jar <http://central.maven.org/maven2/com/github/scribejava/scribejava-core/7.1.1/scribejava-core-7.1.1.jar>`_
 
-After running ``mvn package``, these will be placed into the ``target/dependency`` directory and can be copied from there to the plugin group directory.
+After running ``mvn package``, these will be placed into the ``target/libs`` directory and can be copied from there to the plugin group directory.
 
 For a more detailed explanation of installing plug-ins, refer to the `Curity developer guide <https://developer.curity.io/docs/latest/developer-guide/plugins/index.html#plugin-installation>`_.
 
