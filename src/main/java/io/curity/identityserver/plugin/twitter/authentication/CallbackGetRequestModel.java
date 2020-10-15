@@ -32,15 +32,13 @@ public class CallbackGetRequestModel
     @Nullable
     private final String _errorDescription;
 
-    private String _oauthToken;
-    private String _oauthVerifier;
+    private final String _oauthVerifier;
 
     CallbackGetRequestModel(Request request)
     {
         Function<String, ? extends RuntimeException> invalidParameter = (s) -> new RuntimeException(String.format(
                 "Expected only one query string parameter named %s, but found multiple.", s));
 
-        _oauthToken = request.getParameterValueOrError(OAUTH_TOKEN, invalidParameter);
         _oauthVerifier = request.getParameterValueOrError(OAUTH_VERIFIER, invalidParameter);
         _error = request.getQueryParameterValueOrError("error", invalidParameter);
         _errorDescription = request.getQueryParameterValueOrError("error_description", invalidParameter);
@@ -59,14 +57,8 @@ public class CallbackGetRequestModel
         return _error;
     }
 
-    public String getOAuthToken()
-    {
-        return _oauthToken;
-    }
-
     public String getOAuthVerifier()
     {
         return _oauthVerifier;
     }
-
 }

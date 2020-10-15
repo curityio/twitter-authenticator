@@ -60,7 +60,6 @@ public class CallbackRequestHandler
     private final OAuth1RequestToken _requestToken;
     private final AuthenticatorInformationProvider _authenticatorInformationProvider;
 
-
     public CallbackRequestHandler(TwitterAuthenticatorPluginConfig _config)
     {
         SessionManager sessionManager = _config.getSessionManager();
@@ -92,29 +91,34 @@ public class CallbackRequestHandler
     public Optional<AuthenticationResult> get(CallbackGetRequestModel requestModel,
                                               Response response)
     {
-        handleError(requestModel);
+        handleError(requestModel); // Side-effect: Throws if error
+
+        OAuth1AccessToken accessToken;
+
         try
         {
-            OAuth1AccessToken accessToken = _service.getAccessToken(_requestToken, requestModel.getOAuthVerifier());
-
-            Attributes subjectAttributes = Attributes.of(Attribute.of(USER_ID, accessToken.getParameter(USER_ID)),
-                    Attribute.of(SCREEN_NAME, accessToken.getParameter(SCREEN_NAME)));
-            Attributes contextAttributes = Attributes.of(Attribute.of(OAUTH_TOKEN, accessToken.getToken()),
-                    Attribute.of(OAUTH_TOKEN_SECRET, accessToken.getTokenSecret()));
-
-            AuthenticationAttributes attributes = AuthenticationAttributes.of(
-                    SubjectAttributes.of(accessToken.getParameter(USER_ID), subjectAttributes),
-                    ContextAttributes.of(contextAttributes));
-            AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
-
-            return Optional.of(authenticationResult);
+            accessToken = _service.getAccessToken(_requestToken, requestModel.getOAuthVerifier());
         }
         catch (Exception ex)
         {
-            _logger.info("Login failed with twitter, reason :  {}", ex.getMessage());
+            _logger.info("Login failed with Twitter, reason : {}", ex.getMessage());
 
-            throw _exceptionFactory.externalServiceException("Login failed with twitter, reason : " + ex.getMessage());
+            throw _exceptionFactory.externalServiceException("Login failed with Twitter, reason : " + ex.getMessage());
         }
+
+        Attributes subjectAttributes = Attributes.of(Attribute.of(USER_ID, accessToken.getParameter(USER_ID)),
+                                                     Attribute.of(SCREEN_NAME, accessToken.getParameter(SCREEN_NAME)));
+        Attributes contextAttributes = Attributes.of(Attribute.of(OAUTH_TOKEN, accessToken.getToken()),
+                                                     Attribute.of(OAUTH_TOKEN_SECRET, accessToken.getTokenSecret()));
+
+        AuthenticationAttributes attributes = AuthenticationAttributes.of(
+                SubjectAttributes.of(accessToken.getParameter(USER_ID), subjectAttributes),
+                ContextAttributes.of(contextAttributes));
+        AuthenticationResult authenticationResult = new AuthenticationResult(attributes);
+
+        _logger.trace("Handled Twitter callback successfully");
+
+        return Optional.of(authenticationResult);
     }
 
     private void handleError(CallbackGetRequestModel requestModel)
@@ -123,17 +127,17 @@ public class CallbackRequestHandler
         {
             if ("access_denied".equals(requestModel.getError()))
             {
-                _logger.debug("Got an error from LinkedIn: {} - {}", requestModel.getError(), requestModel
+                _logger.debug("Got an error from Twitter: {} - {}", requestModel.getError(), requestModel
                         .getErrorDescription());
 
                 throw _exceptionFactory.redirectException(
                         _authenticatorInformationProvider.getAuthenticationBaseUri().toASCIIString());
             }
 
-            _logger.warn("Got an error from LinkedIn: {} - {}", requestModel.getError(), requestModel
+            _logger.warn("Got an error from Twitter: {} - {}", requestModel.getError(), requestModel
                     .getErrorDescription());
 
-            throw _exceptionFactory.externalServiceException("Login with LinkedIn failed");
+            throw _exceptionFactory.externalServiceException("Login with Twitter failed");
         }
     }
 

@@ -29,6 +29,7 @@ import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
 import se.curity.identityserver.sdk.errors.ErrorCode;
 import se.curity.identityserver.sdk.http.RedirectStatusCode;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
+import se.curity.identityserver.sdk.service.SessionManager;
 import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
 import se.curity.identityserver.sdk.web.Request;
 import se.curity.identityserver.sdk.web.Response;
@@ -67,20 +68,23 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
                 .callback(createRedirectUri())
                 .build(TwitterApi.instance());
 
+        OAuth1RequestToken requestToken;
 
-        final OAuth1RequestToken requestToken;
         try
         {
             requestToken = service.getRequestToken();
         }
         catch (Exception e)
         {
-            throw _exceptionFactory.externalServiceException("Error authenticating with Twitter: " + e);
+            throw _exceptionFactory.externalServiceException("Error authenticating with Twitter: " + e.getMessage());
         }
 
         String authorizationEndpoint = service.getAuthorizationUrl(requestToken);
-        _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
-        _config.getSessionManager().put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
+
+        SessionManager sessionManager = _config.getSessionManager();
+
+        sessionManager.put(Attribute.of(OAUTH_TOKEN, requestToken.getToken()));
+        sessionManager.put(Attribute.of(OAUTH_TOKEN_SECRET, requestToken.getTokenSecret()));
 
         _logger.debug("Redirecting to {}", authorizationEndpoint);
 
