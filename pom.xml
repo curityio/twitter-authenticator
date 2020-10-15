@@ -61,8 +61,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.scribejava</groupId>
-            <artifactId>scribejava-apis</artifactId>
-            <version>5.0.0</version>
+            <artifactId>scribejava-core</artifactId>
+            <version>7.1.1</version>
         </dependency>
     </dependencies>
 
