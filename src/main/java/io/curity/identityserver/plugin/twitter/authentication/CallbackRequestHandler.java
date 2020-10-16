@@ -50,7 +50,7 @@ import static io.curity.identityserver.plugin.twitter.authentication.Constants.U
 import static io.curity.identityserver.plugin.twitter.authentication.HttpClientUtil.getHttpClient;
 import static io.curity.identityserver.plugin.twitter.descriptor.TwitterAuthenticatorPluginDescriptor.CALLBACK;
 
-public class CallbackRequestHandler
+public final class CallbackRequestHandler
         implements AuthenticatorRequestHandler<CallbackGetRequestModel>
 {
     private static final Logger _logger = LoggerFactory.getLogger(CallbackRequestHandler.class);

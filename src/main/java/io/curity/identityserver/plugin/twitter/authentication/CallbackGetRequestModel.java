@@ -21,10 +21,9 @@ import se.curity.identityserver.sdk.web.Request;
 
 import java.util.function.Function;
 
-import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_VERIFIER;
 
-public class CallbackGetRequestModel
+public final class CallbackGetRequestModel
 {
     @Nullable
     private final String _error;

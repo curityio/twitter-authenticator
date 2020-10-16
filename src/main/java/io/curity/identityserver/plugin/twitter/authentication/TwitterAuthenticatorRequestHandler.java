@@ -45,7 +45,7 @@ import static io.curity.identityserver.plugin.twitter.authentication.Constants.O
 import static io.curity.identityserver.plugin.twitter.authentication.HttpClientUtil.getHttpClient;
 import static io.curity.identityserver.plugin.twitter.descriptor.TwitterAuthenticatorPluginDescriptor.CALLBACK;
 
-public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestHandler<Request>
+public final class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestHandler<Request>
 {
     private static final Logger _logger = LoggerFactory.getLogger(TwitterAuthenticatorRequestHandler.class);
 
