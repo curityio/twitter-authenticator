@@ -19,8 +19,12 @@ package io.curity.identityserver.plugin.twitter.config;
 import se.curity.identityserver.sdk.config.Configuration;
 import se.curity.identityserver.sdk.config.annotation.Description;
 import se.curity.identityserver.sdk.service.ExceptionFactory;
+import se.curity.identityserver.sdk.service.HttpClient;
 import se.curity.identityserver.sdk.service.SessionManager;
+import se.curity.identityserver.sdk.service.WebServiceClientFactory;
 import se.curity.identityserver.sdk.service.authentication.AuthenticatorInformationProvider;
+
+import java.util.Optional;
 
 @SuppressWarnings("InterfaceNeverImplemented")
 public interface TwitterAuthenticatorPluginConfig extends Configuration
@@ -31,9 +35,14 @@ public interface TwitterAuthenticatorPluginConfig extends Configuration
     @Description("Consumer Secret (API Secret)")
     String getClientSecret();
 
+    @Description("The HTTP client with any proxy, TLS settings, etc. that will be used to connect to Twitter")
+    Optional<HttpClient> getHttpClient();
+
     SessionManager getSessionManager();
 
     ExceptionFactory getExceptionFactory();
 
     AuthenticatorInformationProvider getAuthenticatorInformationProvider();
+
+    WebServiceClientFactory getWebServiceClientFactory();
 }
