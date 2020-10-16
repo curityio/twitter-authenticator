@@ -65,8 +65,8 @@ public final class TwitterAuthenticatorRequestHandler implements AuthenticatorRe
     {
         _logger.debug("GET request received for authentication");
 
-        OAuth10aService service = new ServiceBuilder(_config.getClientId())
-                .apiSecret(_config.getClientSecret())
+        OAuth10aService service = new ServiceBuilder(_config.getApiKey())
+                .apiSecret(_config.getApiSecretKey())
                 .callback(createRedirectUri())
                 .httpClient(getHttpClient(_config))
                 .build(TwitterApi.instance());

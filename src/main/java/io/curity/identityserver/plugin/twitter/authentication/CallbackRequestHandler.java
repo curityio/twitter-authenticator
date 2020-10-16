@@ -66,8 +66,8 @@ public final class CallbackRequestHandler
 
         _exceptionFactory = _config.getExceptionFactory();
         _authenticatorInformationProvider = _config.getAuthenticatorInformationProvider();
-        _service = new ServiceBuilder(_config.getClientId())
-                .apiSecret(_config.getClientSecret())
+        _service = new ServiceBuilder(_config.getApiKey())
+                .apiSecret(_config.getApiSecretKey())
                 .callback(createRedirectUri())
                 .httpClient(getHttpClient(_config))
                 .build(TwitterApi.instance());
