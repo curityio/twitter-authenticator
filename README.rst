@@ -57,14 +57,20 @@ As `described in the Twitter documentation <https://developer.twitter.com/en/doc
 
     Fill in the name, description and website and save changes.
 
-When you view the app's configuration after creating it, you'll find the ``Consumer Key`` and ``Consumer Secret`` in ``Keys and Access Tokens`` section. These will be needed later when configuring the plug-in in Curity.
+As you create it, you'll be shown the ``API Key`` and ``API secret Key``. You'll need these later when configuring the plug-in in Curity.
 
     .. figure:: docs/images/create-twitter-app2.png
         :name: new-twitter-app
         :align: center
         :width: 500px
 
-You can manage permissions to twitter resource in ``Permissions`` section of app configuration as show in below figure:
+From this page, you need to enable OAuth by clicking on the ``Edit`` button next to ``Authentication settings``. From there, click on ``Enable 3-legged OAuth``. You may toggle on ``Request email address from users`` as well. Configure the callback URL. To obtain this, you'll need the `endpoint of the server <https://curity.io/resources/tutorials/howtos/concepts/endpoints/>`_ and the final part of the URL will be the ID of the Twitter authenticator and the string ``callback``. An example configuration is shown in the following fiture:
+
+    .. figure:: docs/images/oauth-settings.png
+        :align: center
+        :width: 500px
+
+Also, on the main app page in the Twitter developer portal, you can manage permissions in the ``Permissions`` section as show in below figure:
 
     .. figure:: docs/images/twitter-update-permissions.png
         :align: center
@@ -90,8 +96,8 @@ The easiest way to configure a new Twitter authenticator is using the Curity adm
 
         The Twitter-specific configuration is generated dynamically based on the `configuration model defined in the Java interface <https://github.com/curityio/twitter-authenticator/blob/master/src/main/java/io/curity/identityserver/plugin/twitter/config/TwitterAuthenticatorPluginConfig.java>`_.
 
-6. In the ``Client ID`` textfield, enter the ``Consumer Key`` from the Twitter client app.
-7. Also enter the matching ``Consumer Secret``.
+6. In the ``API Key`` textfield, enter the ``API Key`` from the Twitter client app.
+7. Also enter the matching ``API secret Key``.
 
 Once all of these changes are made, they will be staged, but not committed (i.e., not running). To make them active, click the ``Commit`` menu option in the ``Changes`` menu. Optionally enter a comment in the ``Deploy Changes`` dialogue and click ``OK``.
 

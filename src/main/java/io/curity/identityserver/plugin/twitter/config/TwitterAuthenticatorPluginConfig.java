@@ -29,11 +29,11 @@ import java.util.Optional;
 @SuppressWarnings("InterfaceNeverImplemented")
 public interface TwitterAuthenticatorPluginConfig extends Configuration
 {
-    @Description("Consumer Key (API Key)")
-    String getClientId();
+    @Description("API Key (OAuth client ID)")
+    String getApiKey();
 
-    @Description("Consumer Secret (API Secret)")
-    String getClientSecret();
+    @Description("API secret Key (OAuth client secret)")
+    String getApiSecretKey();
 
     @Description("The HTTP client with any proxy, TLS settings, etc. that will be used to connect to Twitter")
     Optional<HttpClient> getHttpClient();
