@@ -17,11 +17,13 @@
 package io.curity.identityserver.plugin.twitter.authentication;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.httpclient.HttpClient;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import io.curity.identityserver.plugin.twitter.config.TwitterAuthenticatorPluginConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.curity.identityserver.sdk.Nullable;
 import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.authentication.AuthenticationResult;
 import se.curity.identityserver.sdk.authentication.AuthenticatorRequestHandler;
@@ -40,6 +42,7 @@ import java.util.Optional;
 
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN_SECRET;
+import static io.curity.identityserver.plugin.twitter.authentication.HttpClientUtil.getHttpClient;
 import static io.curity.identityserver.plugin.twitter.descriptor.TwitterAuthenticatorPluginDescriptor.CALLBACK;
 
 public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestHandler<Request>
@@ -65,6 +68,7 @@ public class TwitterAuthenticatorRequestHandler implements AuthenticatorRequestH
         OAuth10aService service = new ServiceBuilder(_config.getClientId())
                 .apiSecret(_config.getClientSecret())
                 .callback(createRedirectUri())
+                .httpClient(getHttpClient(_config))
                 .build(TwitterApi.instance());
 
         OAuth1RequestToken requestToken;

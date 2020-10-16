@@ -47,6 +47,7 @@ import static io.curity.identityserver.plugin.twitter.authentication.Constants.O
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.OAUTH_TOKEN_SECRET;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.SCREEN_NAME;
 import static io.curity.identityserver.plugin.twitter.authentication.Constants.USER_ID;
+import static io.curity.identityserver.plugin.twitter.authentication.HttpClientUtil.getHttpClient;
 import static io.curity.identityserver.plugin.twitter.descriptor.TwitterAuthenticatorPluginDescriptor.CALLBACK;
 
 public class CallbackRequestHandler
@@ -68,6 +69,7 @@ public class CallbackRequestHandler
         _service = new ServiceBuilder(_config.getClientId())
                 .apiSecret(_config.getClientSecret())
                 .callback(createRedirectUri())
+                .httpClient(getHttpClient(_config))
                 .build(TwitterApi.instance());
         _requestToken = new OAuth1RequestToken(_config.getSessionManager().get(OAUTH_TOKEN).getValue().toString(),
                 sessionManager.get(OAUTH_TOKEN_SECRET).getValue().toString());
