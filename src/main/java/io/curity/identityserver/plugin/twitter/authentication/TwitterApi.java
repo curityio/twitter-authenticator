@@ -6,9 +6,11 @@ import com.github.scribejava.core.builder.api.DefaultApi10a;
 // Licensed under MIT
 final class TwitterApi extends DefaultApi10a
 {
-    private static final String AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize";
-    private static final String REQUEST_TOKEN_RESOURCE = "api.twitter.com/oauth/request_token";
-    private static final String ACCESS_TOKEN_RESOURCE = "api.twitter.com/oauth/access_token";
+    static final String BASE_URL = "https://api.twitter.com";
+
+    private static final String AUTHORIZE_URL = BASE_URL + "/oauth/authorize";
+    private static final String REQUEST_TOKEN_RESOURCE = BASE_URL + "/oauth/request_token";
+    private static final String ACCESS_TOKEN_RESOURCE = BASE_URL + "/oauth/access_token";
 
     public static TwitterApi instance()
     {
@@ -18,13 +20,13 @@ final class TwitterApi extends DefaultApi10a
     @Override
     public String getAccessTokenEndpoint()
     {
-        return "https://" + ACCESS_TOKEN_RESOURCE;
+        return ACCESS_TOKEN_RESOURCE;
     }
 
     @Override
     public String getRequestTokenEndpoint()
     {
-        return "https://" + REQUEST_TOKEN_RESOURCE;
+        return REQUEST_TOKEN_RESOURCE;
     }
 
     @Override
