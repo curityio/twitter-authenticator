@@ -59,11 +59,6 @@ As `described in the Twitter documentation <https://developer.twitter.com/en/doc
 
 As you create it, you'll be shown the ``API Key`` and ``API secret Key``. You'll need these later when configuring the plug-in in Curity.
 
-    .. figure:: docs/images/create-twitter-app2.png
-        :name: new-twitter-app
-        :align: center
-        :width: 500px
-
 From this page, you need to enable OAuth by clicking on the ``Edit`` button next to ``Authentication settings``. From there, click on ``Enable 3-legged OAuth``. You may toggle on ``Request email address from users`` as well. Configure the callback URL. To obtain this, you'll need the `endpoint of the server <https://curity.io/resources/tutorials/howtos/concepts/endpoints/>`_ and the final part of the URL will be the ID of the Twitter authenticator and the string ``callback``. An example configuration is shown in the following fiture:
 
     .. figure:: docs/images/oauth-settings.png
