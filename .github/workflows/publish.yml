@@ -32,7 +32,7 @@ jobs:
 
       - name: Build plugin artifacts zip
         run: |
-          zip --junk-paths plugin-artifacts target/*.jar
+          zip --junk-paths plugin-artifacts target/libs/*.jar
 
       - name: Upload plugin artifacts
         uses: actions/upload-artifact@v4
@@ -95,6 +95,7 @@ jobs:
 
   publish:
     name: Publish to Nexus
+    needs: package
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.publish   == 'true'}}
     steps:
